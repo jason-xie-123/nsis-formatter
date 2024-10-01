@@ -5,7 +5,7 @@ steps:
 - task: CmdLine@2
   inputs:
     script: '"$(System.DefaultWorkingDirectory)/scripts/config/gh-config.sh" -token $(ENV_GH_TOKEN)'
-  displayName: config aws cli
+  displayName: config gh
 
 - task: GoTool@0
   inputs:
