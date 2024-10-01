@@ -9,7 +9,7 @@ check_gh_exist() {
             echo "[WARN]: can not find gh command and install gh command"
 
             brew install yq
-            fi
+        fi
     fi
 
     if ! command -v gh &>/dev/null; then
@@ -22,11 +22,9 @@ check_gh_exist() {
         exit 1
     fi
 
-    echo "gh Path: $(get_command_path gh)"
     echo "gh version"
     gh --version
 }
-
 
 check_jq_exist() {
     if ! command -v jq &>/dev/null; then
@@ -47,25 +45,8 @@ check_jq_exist() {
         exit 1
     fi
 
-    echo "jq Path: $(get_command_path jq)"
     echo "jq version"
     jq --version
-}
-
-get_command_path() {
-    if [ -n "$1" ]; then
-        if command -v "$1" &>/dev/null; then
-            if [ "$(uname)" = "Darwin" ]; then
-                transfer_path_to_unix "$(which "$1")"
-            elif [[ "$OSTYPE" == "msys" || "$OSTYPE" == "cygwin" || "$OSTYPE" == "win32" || -n "$WINDIR" ]]; then
-                transfer_path_to_unix "$(where "$1")"
-            fi
-        else
-            echo ""
-        fi
-    else
-        echo ""
-    fi
 }
 
 check_folder_exist() {

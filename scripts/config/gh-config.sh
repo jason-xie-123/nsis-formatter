@@ -65,7 +65,7 @@ fi
 COMMAND="echo \"$GH_TOKEN\" | gh auth login --with-token"
 echo exec: "$COMMAND"
 if ! eval "$COMMAND"; then
-echo ""
+    echo ""
     echo "[ERROR]: failed to login with token"
     echo ""
 
@@ -75,12 +75,11 @@ fi
 COMMAND="GH_PAGER='' gh api user | jq ."
 echo exec: "$COMMAND"
 if ! eval "$COMMAND"; then
-echo ""
+    echo ""
     echo "[ERROR]: failed to get gh user info"
     echo ""
 
     exit 1
 fi
-
 
 cd "$OLD_PWD" || exit >/dev/null 2>&1
