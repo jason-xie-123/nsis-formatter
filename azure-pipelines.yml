@@ -4,7 +4,7 @@ pool:
 steps:
 - task: CmdLine@2
   inputs:
-    script: '"$(System.DefaultWorkingDirectory)/scripts/config/gh-config.sh" -token $(ENV_GH_TOKEN) -secret $(SDK_AWS_SECRET_ACCESS_KEY)'
+    script: '"$(System.DefaultWorkingDirectory)/scripts/config/gh-config.sh" -token $(ENV_GH_TOKEN)'
   displayName: config aws cli
 
 - task: GoTool@0
@@ -25,6 +25,6 @@ steps:
   displayName: 'Uploading Artifacts Directory for the Current Run'
   inputs:
     PathtoPublish: '$(Build.artifactStagingDirectory)'
-    ArtifactName: 'GeneratedSDK'
+    ArtifactName: 'GeneratedResult'
     PublishLocation: Container
 
