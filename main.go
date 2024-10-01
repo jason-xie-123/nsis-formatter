@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"fmt"
+	packageVersion "nsis-formatter/version"
 	"os"
 	"regexp"
 	"runtime"
@@ -185,7 +186,7 @@ func main() {
 	app := &cli.App{
 		Name:    "nsis-formatter",
 		Usage:   "CLI tool to format NSIS scripts",
-		Version: "0.0.1",
+		Version: packageVersion.Version,
 		Flags: []cli.Flag{
 			&cli.StringFlag{
 				Name:  "eol",

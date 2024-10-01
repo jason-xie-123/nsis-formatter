@@ -1,0 +1,30 @@
+pool:
+  vmImage: 'macOS-14'
+
+steps:
+- task: CmdLine@2
+  inputs:
+    script: '"$(System.DefaultWorkingDirectory)/scripts/config/gh-config.sh" -token $(ENV_GH_TOKEN) -secret $(SDK_AWS_SECRET_ACCESS_KEY)'
+  displayName: config aws cli
+
+- task: GoTool@0
+  inputs:
+    version: '1.20.14'
+
+- task: CmdLine@2
+  inputs:
+    script: '"$(System.DefaultWorkingDirectory)/scripts/build/release.sh"'
+  displayName: exec release
+
+- task: CmdLine@2
+  inputs:
+    script: 'cp -r "$(System.DefaultWorkingDirectory)/release" "$(Build.artifactStagingDirectory)"'
+  displayName: Copying releases to Artifacts Directory
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Uploading Artifacts Directory for the Current Run'
+  inputs:
+    PathtoPublish: '$(Build.artifactStagingDirectory)'
+    ArtifactName: 'GeneratedSDK'
+    PublishLocation: Container
+
