@@ -14,17 +14,21 @@ import (
 
 var (
 	rules = struct {
+		doubleIndenters  []string
 		indenters        []string
 		dedenters        []string
 		specialIndenters []string
 		specialDedenters []string
 	}{
+		doubleIndenters: []string{
+			"${Switch}", "${Select}",
+		},
 		indenters: []string{
 			"!if", "!ifdef", "!ifmacrodef", "!ifmacrondef", "!ifndef", "!macro",
-			"${Case}", "${Case2}", "${Case3}", "${Case4}", "${Case5}", "${CaseElse}",
+			"${Case2}", "${Case3}", "${Case4}", "${Case5}",
 			"${Default}", "${Do}", "${DoUntil}", "${DoWhile}", "${For}", "${ForEach}",
 			"${If}", "${IfNot}", "${MementoSection}", "${MementoUnselectedSection}",
-			"${Select}", "${Switch}", "${Unless}", "Function", "PageEx", "Section",
+			"${Unless}", "Function", "PageEx", "Section",
 			"SectionGroup", "${While}",
 		},
 		dedenters: []string{
@@ -36,7 +40,7 @@ var (
 		specialIndenters: []string{
 			"!else", "!elseif", "${Else}", "${ElseIf}", "${ElseIfNot}",
 			"${ElseUnless}", "${AndIf}", "${AndIfNot}", "${AndUnless}",
-			"${OrIf}", "${OrIfNot}", "${OrUnless}",
+			"${OrIf}", "${OrIfNot}", "${OrUnless}", "${Case}", "${CaseElse}",
 		},
 		specialDedenters: []string{
 			"${Break}",
@@ -109,6 +113,9 @@ func createFormatter(options FormatterOptions) func(scanner *bufio.Scanner) (str
 			} else if checkKeyPass(rules.specialDedenters, keyword) {
 				formattedLines = append(formattedLines, formatLine(trimmedLine, indentationLevel, mergedOptions))
 				indentationLevel--
+			} else if checkKeyPass(rules.doubleIndenters, keyword) {
+				formattedLines = append(formattedLines, formatLine(trimmedLine, indentationLevel, mergedOptions))
+				indentationLevel += 2
 			} else if checkKeyPass(rules.indenters, keyword) {
 				formattedLines = append(formattedLines, formatLine(trimmedLine, indentationLevel, mergedOptions))
 				indentationLevel++

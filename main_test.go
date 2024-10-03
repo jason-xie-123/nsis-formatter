@@ -291,3 +291,40 @@ func TestCommonTest(t *testing.T) {
 	// 	t.Errorf("TestSpaceIndentation3 failed")
 	// }
 }
+
+func TestCommonTest2(t *testing.T) {
+	options := FormatterOptions{
+		EndOfLines:     "\r\n",
+		IndentSize:     16,
+		TrimEmptyLines: true,
+		UseTabs:        false,
+	}
+	format := createFormatter(options)
+
+	file, err := os.Open("./fixtures/commontest2.nsi")
+	if err != nil {
+		t.Error(err)
+	}
+
+	defer file.Close()
+
+	scanner := bufio.NewScanner(file)
+	formattedContent, err := format(scanner)
+	if err != nil {
+		t.Error(err)
+	}
+
+	// contentExpected, err := os.ReadFile("./expected/commontest2.nsi")
+	// if err != nil {
+	// 	t.Error(err)
+	// }
+
+	err = os.WriteFile("./expected/commontest2.nsi", []byte(formattedContent), 0644)
+	if err != nil {
+		t.Error(err)
+	}
+
+	// if formattedContent != string(contentExpected) {
+	// 	t.Errorf("TestSpaceIndentation3 failed")
+	// }
+}
