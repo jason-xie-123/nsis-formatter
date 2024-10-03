@@ -30,7 +30,7 @@ var (
 		dedenters: []string{
 			"!endif", "!macroend", "${EndIf}", "${EndSelect}", "${EndSwitch}",
 			"${EndWhile}", "${Loop}", "${LoopUntil}", "${LoopWhile}",
-			"${MementoSectionEnd}", "${Next}", "FunctionEnd",
+			"${MementoSectionEnd}", "${Next}", "${EndUnless}", "FunctionEnd",
 			"PageExEnd", "SectionEnd", "SectionGroupEnd",
 		},
 		specialIndenters: []string{
