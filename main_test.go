@@ -261,7 +261,7 @@ func TestCommonTest(t *testing.T) {
 	// }
 
 	if formattedContent != string(contentExpected) {
-		t.Errorf("TestSpaceIndentation3 failed")
+		t.Errorf("TestCommonTest failed")
 	}
 }
 
@@ -298,7 +298,7 @@ func TestCommonTest2(t *testing.T) {
 	// }
 
 	if formattedContent != string(contentExpected) {
-		t.Errorf("TestSpaceIndentation3 failed")
+		t.Errorf("TestCommonTest2 failed")
 	}
 }
 
@@ -335,7 +335,7 @@ func TestCommonTest3(t *testing.T) {
 	// }
 
 	if formattedContent != string(contentExpected) {
-		t.Errorf("TestSpaceIndentation3 failed")
+		t.Errorf("TestCommonTest3 failed")
 	}
 }
 
