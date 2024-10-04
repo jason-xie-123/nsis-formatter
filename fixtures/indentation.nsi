@@ -12,7 +12,7 @@ InstallDir "$PROGRAMFILES\Demo"
 
 # Pages ------------------------------------
 PageEx license
-LicenseText "Readme"
+		LicenseText "Readme"
 PageExEnd
 Page components
 Page directory
@@ -20,78 +20,78 @@ Page instfiles
 
 # Macros
 !macro Macro
-Nop
+		Nop
 !macroend
 
 # Sections ---------------------------------
 SectionGroup "LogicLib.nsh"
-Section "If"
-${If} "true" == "true"
-Nop
-${EndIf}
+		Section "If"
+				${If} "true" == "true"
+						Nop
+				${EndIf}
 
-${If} "true" == "true"
-${AndIf} "false" == "false"
-Nop
-${EndIf}
+				${If} "true" == "true"
+				${AndIf} "false" == "false"
+						Nop
+				${EndIf}
 
-${If} "true" == "true"
-${OrIf} "false" == "false"
-Nop
-${EndIf}
+				${If} "true" == "true"
+				${OrIf} "false" == "false"
+						Nop
+				${EndIf}
 
-${If} "true" == "true"
-Nop
-${ElseIf} "false" == "false"
-${AndIfNot} "true" == "false"
-Nop
-${ElseIfNot} "true" == "false"
-${OrIfNot} "false" == "true"
-Nop
-Nop
-${ElseUnless} "true" != "false"
-Nop
-${Else}
-Nop
-${EndIf}
-SectionEnd
+				${If} "true" == "true"
+						Nop
+				${ElseIf} "false" == "false"
+				${AndIfNot} "true" == "false"
+						Nop
+				${ElseIfNot} "true" == "false"
+				${OrIfNot} "false" == "true"
+						Nop
+						Nop
+				${ElseUnless} "true" != "false"
+						Nop
+				${Else}
+						Nop
+				${EndIf}
+		SectionEnd
 
-Section "For"
-${For} $0 1 5
-Nop
-${Next}
-SectionEnd
+		Section "For"
+				${For} $0 1 5
+						Nop
+				${Next}
+		SectionEnd
 
-Section "Switch"
-${Switch} $R1
-${Case} 1
-Nop
-${Break}
-${Case} 2
-Nop
-${Break}
-${Default}
-Nop
-${Break}
-${EndSwitch}
-SectionEnd
+		Section "Switch"
+				${Switch} $R1
+						${Case} 1
+								Nop
+								${Break}
+						${Case} 2
+								Nop
+								${Break}
+						${Default}
+								Nop
+								${Break}
+				${EndSwitch}
+		SectionEnd
 SectionGroupEnd
 
 # Functions --------------------------------
 Function .onInit
-!if "true" == "true"
-MessageBox MB_OK "Condition met"
-!endif
+		!if "true" == "true"
+				MessageBox MB_OK "Condition met"
+		!endif
 
-!if "true" == "true"
-MessageBox MB_OK "Condition met"
-!else
-MessageBox MB_OK "Condition notmet"
-!endif
+		!if "true" == "true"
+				MessageBox MB_OK "Condition met"
+		!else
+				MessageBox MB_OK "Condition notmet"
+		!endif
 
-!if "false" == "false"
-!if "true" != "false"
-MessageBox MB_OK "Condition met"
-!endif
-!endif
+		!if "false" == "false"
+				!if "true" != "false"
+						MessageBox MB_OK "Condition met"
+				!endif
+		!endif
 FunctionEnd
