@@ -356,4 +356,165 @@ ${For} $R1 1 5
   DetailPrint $R1
 ${Next}
 
+; ----------------- !ifdef & !else & !endif -----------------
+
+!ifdef DEBUG
+  MessageBox MB_OK "This is a debug build."
+!else
+  MessageBox MB_OK "This is a release build."
+!endif
+
+; ----------------- !ifmacrodef -----------------
+!macro MyMacro
+  MessageBox MB_OK "This is MyMacro."
+!macroend
+
+!ifmacrodef MyMacro
+  ; 当 MyMacro 被定义时执行
+  MessageBox MB_OK "MyMacro is defined!"
+!else
+  ; 当 MyMacro 未定义时执行
+  MessageBox MB_OK "MyMacro is not defined!"
+!endif
+
+; ----------------- !ifmacrondef -----------------
+
+!macro MyMacro
+  MessageBox MB_OK "This is MyMacro."
+!macroend
+
+!ifmacrondef MyMacro
+  ; 当 MyMacro 没有被定义时执行
+  MessageBox MB_OK "MyMacro is not defined. Defining a default one."
+  !macro MyMacro
+    MessageBox MB_OK "This is the default MyMacro."
+  !macroend
+!else
+  ; 当 MyMacro 已被定义时执行
+  MessageBox MB_OK "MyMacro is already defined!"
+!endif
+
+; ----------------- !ifndef -----------------
+
+!ifndef DEBUG
+  !define DEBUG
+  MessageBox MB_OK "DEBUG was not defined. Defining it now."
+!else
+  MessageBox MB_OK "DEBUG is already defined."
+!endif
+
+
+; ----------------- ${Case2} & ${Case3} & ${Case4} & ${Case5} -----------------
+                Var STRING1
+Var STRING2
+Var LOWERCASE_STRING1
+Var LOWERCASE_STRING2
+
+  StrCpy $STRING1 "HelloWorld"
+  StrCpy $STRING2 "helloworld"
+
+  ${Case2} $STRING1 $LOWERCASE_STRING1
+  ${Case2} $STRING2 $LOWERCASE_STRING2
+
+  StrCmp $LOWERCASE_STRING1 $LOWERCASE_STRING2 0 +3
+  MessageBox MB_OK "The strings are equal (case-insensitive)"
+  Goto end
+
+  MessageBox MB_OK "The strings are not equal"
+  Var UPPERCASE_STRING
+
+  StrCpy $0 "hello world"
+  ${Case3} $0 $UPPERCASE_STRING
+  MessageBox MB_OK "Uppercase version: $UPPERCASE_STRING"
+
+  Var FORMATTED_STRING
+
+  StrCpy $0 "HELLO world"
+  ${Case4} $0 $FORMATTED_STRING
+  MessageBox MB_OK "Formatted version: $FORMATTED_STRING"
+
+  Var FORMATTED_STRING
+
+  StrCpy $0 "hello world from nsis"
+  ${Case5} $0 $FORMATTED_STRING
+  MessageBox MB_OK "Formatted version: $FORMATTED_STRING"
+
+; ----------------- !elseif -----------------
+
+Var OS_TYPE
+
+  StrCpy $OS_TYPE "Windows"
+
+  !if "$OS_TYPE" == "Windows"
+    MessageBox MB_OK "This is a Windows operating system."
+  !elseif "$OS_TYPE" == "Linux"
+    MessageBox MB_OK "This is a Linux operating system."
+  !else
+    MessageBox MB_OK "Unknown operating system."
+  !endif
+
+SectionEnd
+
+; ----------------- ${MementoSection} & ${MementoUnselectedSection} & ${MementoSectionEnd} -----------------
+
+Section "Main Section"
+  MessageBox MB_OK "Main Section Start"
+  ${MementoSection} ; 保存当前节的位置
+SectionEnd
+
+Section "Insert Section 1"
+  MessageBox MB_OK "Insert Section 1"
+SectionEnd
+
+Section "Insert Section 2"
+  MessageBox MB_OK "Insert Section 2"
+SectionEnd
+
+${MementoSection} ; 恢复到保存的节位置
+
+Section "Main Section Continue"
+  MessageBox MB_OK "Main Section Continue"
+SectionEnd
+
+Section "Main Section"
+  MessageBox MB_OK "Main Section Start"
+SectionEnd
+
+Section "Optional Feature"  ; 假设这是一个可选节
+  MessageBox MB_OK "Optional Feature Selected"
+SectionEnd
+
+; 假设这里的条件是用户未选择"Optional Feature"
+${MementoUnselectedSection}  ; 保存未选定节的位置
+
+Section "Unselected Actions"
+  MessageBox MB_OK "This is an action for unselected features."
+SectionEnd
+
+${MementoUnselectedSection}  ; 恢复未选定节的位置
+
+Section "Main Section Continue"
+  MessageBox MB_OK "Main Section Continue"
+SectionEnd
+
+Section "Main Section"
+  MessageBox MB_OK "Main Section Start"
+SectionEnd
+
+Section "Optional Feature"
+  MessageBox MB_OK "Optional Feature Selected"
+SectionEnd
+
+; 保存未选定节的位置
+${MementoUnselectedSection}
+
+Section "Unselected Actions"
+  MessageBox MB_OK "This is an action for unselected features."
+SectionEnd
+
+; 结束未选定节的保存状态
+${MementoSectionEnd}
+
+Section "Main Section Continue"
+  MessageBox MB_OK "Main Section Continue"
 SectionEnd

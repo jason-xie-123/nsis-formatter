@@ -102,19 +102,19 @@ func TestSpaceIndentation2(t *testing.T) {
 		t.Error(err)
 	}
 
-	// contentExpected, err := os.ReadFile("./expected/space-indentation-2.nsi")
-	// if err != nil {
-	// 	t.Error(err)
-	// }
-
-	err = os.WriteFile("./expected/space-indentation-2.nsi", []byte(formattedContent), 0644)
+	contentExpected, err := os.ReadFile("./expected/space-indentation-2.nsi")
 	if err != nil {
 		t.Error(err)
 	}
 
-	// if formattedContent != string(contentExpected) {
-	// 	t.Errorf("TestSpaceIndentation2 failed")
+	// err = os.WriteFile("./expected/space-indentation-2.nsi", []byte(formattedContent), 0644)
+	// if err != nil {
+	// 	t.Error(err)
 	// }
+
+	if formattedContent != string(contentExpected) {
+		t.Errorf("TestSpaceIndentation2 failed")
+	}
 }
 
 func TestSpaceIndentation3(t *testing.T) {

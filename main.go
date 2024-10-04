@@ -18,36 +18,15 @@ var (
 		beforeDedenters []string
 		afterIndenters  []string
 		afterDedenters  []string
-		// specialIndenters []string
 	}{
-		beforeIndenters: []string{
-			"${Select}",
-		},
+		beforeIndenters: []string{},
 		beforeDedenters: []string{
-			"${EndSelect}", "${EndSwitch}", "${EndSwitch}", "SectionEnd", "FunctionEnd", "${AndIf}", "${EndIf}", "${OrIf}", "${ElseIf}", "${AndIfNot}",
-			"${ElseIfNot}", "${OrIfNot}", "${ElseUnless}", "${Else}", "${Next}", "${Case}", "${Default}",
-			"!endif", "!else", "!macroend", "PageExEnd", "SectionGroupEnd",
+			"${EndSelect}", "${EndSelect}", "${EndSwitch}", "${EndSwitch}", "SectionEnd", "FunctionEnd", "${AndIf}", "${EndIf}", "${OrIf}", "${ElseIf}", "${AndIfNot}", "${ElseIfNot}", "${OrIfNot}", "${ElseUnless}", "${Else}", "${Next}", "${Case}", "${Default}", "${CaseElse}", "!endif", "!else", "!macroend", "PageExEnd", "SectionGroupEnd", "${AndUnless}", "${OrUnless}", "${EndWhile}", "${Loop}", "${LoopWhile}", "${LoopUntil}", "${EndUnless}", "!elseif",
 		},
 		afterIndenters: []string{
-			"!if", "!ifdef", "!ifmacrodef", "!ifmacrondef", "!ifndef", "!macro",
-			"${Case2}", "${Case3}", "${Case4}", "${Case5}",
-			"${Do}", "${DoUntil}", "${DoWhile}", "${For}", "${ForEach}",
-			"${If}", "${IfNot}", "${MementoSection}", "${MementoUnselectedSection}",
-			"${Unless}", "Function", "PageEx", "Section",
-			"SectionGroup", "${While}", "${AndIf}", "${OrIf}", "${ElseIf}", "${AndIfNot}", "${ElseIfNot}",
-			"${OrIfNot}", "${ElseUnless}", "${Else}",
-			"${Case}", "${Switch}", "${Switch}", "${Default}",
-			"!else",
+			"!if", "!ifdef", "!ifmacrodef", "!ifmacrondef", "!ifndef", "!macro", "${Do}", "${DoUntil}", "${DoWhile}", "${For}", "${ForEach}", "${If}", "${IfNot}", "${Unless}", "Function", "PageEx", "Section", "SectionGroup", "${While}", "${AndIf}", "${OrIf}", "${ElseIf}", "${AndIfNot}", "${ElseIfNot}", "${OrIfNot}", "${ElseUnless}", "${Else}", "${Case}", "${Switch}", "${Switch}", "${Default}", "!else", "${Select}", "${Select}", "${CaseElse}", "${AndUnless}", "${OrUnless}", "!elseif",
 		},
-		afterDedenters: []string{
-			"!macroend",
-			"${EndWhile}", "${Loop}", "${LoopUntil}", "${LoopWhile}",
-			"${MementoSectionEnd}", "${EndUnless}",
-			"!elseif",
-			"${AndUnless}",
-			"${OrUnless}", "${CaseElse}",
-		},
-		// specialIndenters: []string{},
+		afterDedenters: []string{},
 	}
 )
 
@@ -68,7 +47,6 @@ func createFormatter(options FormatterOptions) func(scanner *bufio.Scanner) (str
 		UseTabs:        true,
 	}
 
-	// Override mergedOptions with provided options
 	if options.IndentSize > 0 {
 		mergedOptions.IndentSize = options.IndentSize
 	}
@@ -82,7 +60,6 @@ func createFormatter(options FormatterOptions) func(scanner *bufio.Scanner) (str
 	return func(scanner *bufio.Scanner) (string, error) {
 		indentationLevel := 0
 		var formattedLines []string
-		// lines := strings.Split(fileContents, mergedOptions.EndOfLines)
 
 		// Flag to track consecutive empty lines
 		previousLineEmpty := false
@@ -120,7 +97,6 @@ func createFormatter(options FormatterOptions) func(scanner *bufio.Scanner) (str
 			if counter := checkKeyPass(rules.beforeIndenters, keyword); counter > 0 {
 				indentationLevel += counter
 				currentIndentation = indentationLevel
-				// formattedLines = append(formattedLines, formatLine(trimmedLine, indentationLevel, mergedOptions))
 			}
 			if counter := checkKeyPass(rules.beforeDedenters, keyword); counter > 0 {
 				indentationLevel -= counter
@@ -128,16 +104,13 @@ func createFormatter(options FormatterOptions) func(scanner *bufio.Scanner) (str
 					indentationLevel = 0
 				}
 				currentIndentation = indentationLevel
-				// formattedLines = append(formattedLines, formatLine(trimmedLine, indentationLevel, mergedOptions))
 			}
 			if counter := checkKeyPass(rules.afterIndenters, keyword); counter > 0 {
 				currentIndentation = indentationLevel
-				// formattedLines = append(formattedLines, formatLine(trimmedLine, indentationLevel, mergedOptions))
 				indentationLevel += counter
 			}
 			if counter := checkKeyPass(rules.afterDedenters, keyword); counter > 0 {
 				currentIndentation = indentationLevel
-				// formattedLines = append(formattedLines, formatLine(trimmedLine, indentationLevel, mergedOptions))
 				indentationLevel -= counter
 				if indentationLevel < 0 {
 					indentationLevel = 0
