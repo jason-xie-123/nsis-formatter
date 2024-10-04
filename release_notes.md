@@ -1,3 +1,4 @@
-## Changelog for v0.0.1
+## Changelog for v0.1.1
 
-- Init
+- Optimize the algorithm to adapt to more grammars 
+- Fix some bugs
