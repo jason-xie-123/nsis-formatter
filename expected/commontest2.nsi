@@ -12,9 +12,9 @@ ${Select} $test10
                                                                 DetailPrint '$$test10 is equal to c'
                                                 ${CaseElse}
                                                                 DetailPrint '$$test10 is equal to $test10'
-                                                ${EndSelect}
-                                ${Case} 'c'
-                                                DetailPrint '$$test10 is equal to c'
-                                ${CaseElse}
-                                                DetailPrint '$$test10 is equal to $test10'
                                 ${EndSelect}
+                ${Case} 'c'
+                                DetailPrint '$$test10 is equal to c'
+                ${CaseElse}
+                                DetailPrint '$$test10 is equal to $test10'
+${EndSelect}

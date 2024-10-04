@@ -159,194 +159,194 @@ Section "My Program"
                 var /GLOBAL test10
                 StrCpy $test10 'b'
 
-${Select} $test10
-${Case} 'a'
-DetailPrint '$$test10 is equal to a'
-${Case} 'b'
-DetailPrint '$$test10 is equal to b'
-${Case} 'c'
-DetailPrint '$$test10 is equal to c'
-${CaseElse}
-DetailPrint '$$test10 is equal to $test10'
-${EndSelect}
+                ${Select} $test10
+                                ${Case} 'a'
+                                                DetailPrint '$$test10 is equal to a'
+                                ${Case} 'b'
+                                                DetailPrint '$$test10 is equal to b'
+                                ${Case} 'c'
+                                                DetailPrint '$$test10 is equal to c'
+                                ${CaseElse}
+                                                DetailPrint '$$test10 is equal to $test10'
+                ${EndSelect}
 
-; ----------------- Select - Case - Default - EndSelect -----------------
+                ; ----------------- Select - Case - Default - EndSelect -----------------
 
-var /GLOBAL test11
-StrCpy $test11 'd'
+                var /GLOBAL test11
+                StrCpy $test11 'd'
 
-${Select} $test11
-${Case} 'a'
-DetailPrint '$$test11 is equal to a'
-${Case} 'b'
-DetailPrint '$$test11 is equal to b'
-${Case} 'c'
-DetailPrint '$$test11 is equal to c'
-${Default}
-    DetailPrint '$$test11 is equal to $test11'
-${EndSelect}
+                ${Select} $test11
+                                ${Case} 'a'
+                                                DetailPrint '$$test11 is equal to a'
+                                ${Case} 'b'
+                                                DetailPrint '$$test11 is equal to b'
+                                ${Case} 'c'
+                                                DetailPrint '$$test11 is equal to c'
+                                ${Default}
+                                                DetailPrint '$$test11 is equal to $test11'
+                ${EndSelect}
 
-                                                                                                                                                ; ----------------- Switch - Case - CaseElse - EndSwitch -----------------
+                ; ----------------- Switch - Case - CaseElse - EndSwitch -----------------
 
-                                                                                                                                                var /GLOBAL test12
-                                                                                                                                                StrCpy $test12 'b'
+                var /GLOBAL test12
+                StrCpy $test12 'b'
 
-                                                                                                                                                ${Switch} $test12
-                                                                                                                                                                ${Case} 'a'
-                                                                                                                                                                                DetailPrint '$$test12 is equal to a'
-                                                                                                                                                                                ${Break}
-                                                                                                                                                                ${Case} 'b'
-                                                                                                                                                                                DetailPrint '$$test12 is equal to b'
-                                                                                                                                                                                ${Break}
-                                                                                                                                                                ${Case} 'c'
-                                                                                                                                                                                DetailPrint '$$test12 is equal to c'
-                                                                                                                                                                                ${Break}
-                                                                                                                                                                ${CaseElse}
-                                                                                                                                                                                DetailPrint '$$test12 is equal to $test12'
-                                                                                                                                                                ${EndSwitch}
+                ${Switch} $test12
+                                ${Case} 'a'
+                                                DetailPrint '$$test12 is equal to a'
+                                                ${Break}
+                                ${Case} 'b'
+                                                DetailPrint '$$test12 is equal to b'
+                                                ${Break}
+                                ${Case} 'c'
+                                                DetailPrint '$$test12 is equal to c'
+                                                ${Break}
+                                ${CaseElse}
+                                                DetailPrint '$$test12 is equal to $test12'
+                ${EndSwitch}
 
-                                                                                                                                                                ; ----------------- Switch - Case - Default - EndSwitch -----------------
-                                                                                                                                                                var /GLOBAL test13
-                                                                                                                                                                StrCpy $test13 'b'
+                ; ----------------- Switch - Case - Default - EndSwitch -----------------
+                var /GLOBAL test13
+                StrCpy $test13 'b'
 
-                                                                                                                                                                ${Switch} $test13
-                                                                                                                                                                                ${Case} 'a'
-                                                                                                                                                                                                DetailPrint '$$test13 is equal to a'
-                                                                                                                                                                                                ${Break}
-                                                                                                                                                                                ${Case} 'b'
-                                                                                                                                                                                                DetailPrint '$$test13 is equal to b'
-                                                                                                                                                                                                ${Break}
-                                                                                                                                                                                ${Case} 'c'
-                                                                                                                                                                                                DetailPrint '$$test13 is equal to c'
-                                                                                                                                                                                                ${Break}
-                                                                                                                                                                                ${Default}
-                                                                                                                                                                                                DetailPrint '$$test13 is equal to $test13'
-                                                                                                                                                                                ${EndSwitch}
+                ${Switch} $test13
+                                ${Case} 'a'
+                                                DetailPrint '$$test13 is equal to a'
+                                                ${Break}
+                                ${Case} 'b'
+                                                DetailPrint '$$test13 is equal to b'
+                                                ${Break}
+                                ${Case} 'c'
+                                                DetailPrint '$$test13 is equal to c'
+                                                ${Break}
+                                ${Default}
+                                                DetailPrint '$$test13 is equal to $test13'
+                ${EndSwitch}
 
-                                                                                                                                                                                ; ----------------- Switch - Case - CaseElse - EndSwitch WithOut Break -----------------
+                ; ----------------- Switch - Case - CaseElse - EndSwitch WithOut Break -----------------
 
-                                                                                                                                                                                var /GLOBAL test14
-                                                                                                                                                                                StrCpy $test14 'a'
+                var /GLOBAL test14
+                StrCpy $test14 'a'
 
-                                                                                                                                                                                ${Switch} $test14
-                                                                                                                                                                                                ${Case} 'a'
-                                                                                                                                                                                                                DetailPrint '$$test14 is equal to a'
-                                                                                                                                                                                                                ${Case} 'b'
-                                                                                                                                                                                                                                DetailPrint '$$test14 is equal to b'
-                                                                                                                                                                                                                                ${Case} 'c'
-                                                                                                                                                                                                                                                DetailPrint '$$test14 is equal to c'
-                                                                                                                                                                                                                                                ${Default}
-                                                                                                                                                                                                                                                                DetailPrint '$$test14 is equal to $test14'
-                                                                                                                                                                                                                                                ${EndSwitch}
+                ${Switch} $test14
+                                ${Case} 'a'
+                                                DetailPrint '$$test14 is equal to a'
+                                ${Case} 'b'
+                                                DetailPrint '$$test14 is equal to b'
+                                ${Case} 'c'
+                                                DetailPrint '$$test14 is equal to c'
+                                ${Default}
+                                                DetailPrint '$$test14 is equal to $test14'
+                ${EndSwitch}
 
-                                                                                                                                                                                                                                                ; ----------------- While - EndWhile -----------------
+                ; ----------------- While - EndWhile -----------------
 
-                                                                                                                                                                                                                                                StrCpy $R1 0
-                                                                                                                                                                                                                                                ${While} $R1 < 5
-                                                                                                                                                                                                                                                                IntOp $R1 $R1 + 1
-                                                                                                                                                                                                                                                                DetailPrint $R1
-                                                                                                                                                                                                                                                ${EndWhile}
+                StrCpy $R1 0
+                ${While} $R1 < 5
+                                IntOp $R1 $R1 + 1
+                                DetailPrint $R1
+                ${EndWhile}
 
-                                                                                                                                                                                                                                                ; ----------------- DoWhile - Loop -----------------
+                ; ----------------- DoWhile - Loop -----------------
 
-                                                                                                                                                                                                                                                StrCpy $R1 0
-                                                                                                                                                                                                                                                ${DoWhile} $R1 < 5
-                                                                                                                                                                                                                                                                IntOp $R1 $R1 + 1
-                                                                                                                                                                                                                                                                DetailPrint $R1
-                                                                                                                                                                                                                                                ${Loop}
+                StrCpy $R1 0
+                ${DoWhile} $R1 < 5
+                                IntOp $R1 $R1 + 1
+                                DetailPrint $R1
+                ${Loop}
 
-                                                                                                                                                                                                                                                ; ----------------- DoUntil - Loop -----------------
+                ; ----------------- DoUntil - Loop -----------------
 
-                                                                                                                                                                                                                                                StrCpy $R1 0
-                                                                                                                                                                                                                                                ${DoUntil} $R1 >= 5
-                                                                                                                                                                                                                                                                IntOp $R1 $R1 + 1
-                                                                                                                                                                                                                                                                DetailPrint $R1
-                                                                                                                                                                                                                                                ${Loop}
+                StrCpy $R1 0
+                ${DoUntil} $R1 >= 5
+                                IntOp $R1 $R1 + 1
+                                DetailPrint $R1
+                ${Loop}
 
-                                                                                                                                                                                                                                                ; ----------------- Do - LoopWhile -----------------
+                ; ----------------- Do - LoopWhile -----------------
 
-                                                                                                                                                                                                                                                StrCpy $R1 0
-                                                                                                                                                                                                                                                ${Do}
-                                                                                                                                                                                                                                                                IntOp $R1 $R1 + 1
-                                                                                                                                                                                                                                                                DetailPrint $R1
-                                                                                                                                                                                                                                                ${LoopWhile} $R1 < 5
+                StrCpy $R1 0
+                ${Do}
+                                IntOp $R1 $R1 + 1
+                                DetailPrint $R1
+                ${LoopWhile} $R1 < 5
 
-                                                                                                                                                                                                                                                ; ----------------- Do - LoopUntil -----------------
+                ; ----------------- Do - LoopUntil -----------------
 
-                                                                                                                                                                                                                                                StrCpy $R1 0
-                                                                                                                                                                                                                                                ${Do}
-                                                                                                                                                                                                                                                                IntOp $R1 $R1 + 1
-                                                                                                                                                                                                                                                                DetailPrint $R1
-                                                                                                                                                                                                                                                ${LoopUntil} $R1 >= 5
+                StrCpy $R1 0
+                ${Do}
+                                IntOp $R1 $R1 + 1
+                                DetailPrint $R1
+                ${LoopUntil} $R1 >= 5
 
-                                                                                                                                                                                                                                                ; ----------------- Break & Continue -----------------
+                ; ----------------- Break & Continue -----------------
 
-                                                                                                                                                                                                                                                StrCpy $R1 0
-                                                                                                                                                                                                                                                ${While} $R1 < 5
-                                                                                                                                                                                                                                                                IntOp $R1 $R1 + 1
-                                                                                                                                                                                                                                                                ${If} $R1 == 2
-                                                                                                                                                                                                                                                                                ${Continue}
-                                                                                                                                                                                                                                                                ${ElseIf} $R1 == 4
-                                                                                                                                                                                                                                                                                ${Break}
-                                                                                                                                                                                                                                                ${EndIf}
-                                                                                                                                                                                                                                                DetailPrint $R1
-                                                                                                                                                                                                                                ${EndWhile}
+                StrCpy $R1 0
+                ${While} $R1 < 5
+                                IntOp $R1 $R1 + 1
+                                ${If} $R1 == 2
+                                                ${Continue}
+                                ${ElseIf} $R1 == 4
+                                                ${Break}
+                                ${EndIf}
+                                DetailPrint $R1
+                ${EndWhile}
 
-                                                                                                                                                                                                                                ; ----------------- ExitDo -----------------
+                ; ----------------- ExitDo -----------------
 
-                                                                                                                                                                                                                                StrCpy $R1 0
-                                                                                                                                                                                                                                ${Do}
-                                                                                                                                                                                                                                                IntOp $R1 $R1 + 1
-                                                                                                                                                                                                                                                ${If} $R1 == 4
-                                                                                                                                                                                                                                                                ${ExitDo}
-                                                                                                                                                                                                                                                ${EndIf}
-                                                                                                                                                                                                                                                DetailPrint $R1
-                                                                                                                                                                                                                                ${LoopWhile} $R1 < 5
+                StrCpy $R1 0
+                ${Do}
+                                IntOp $R1 $R1 + 1
+                                ${If} $R1 == 4
+                                                ${ExitDo}
+                                ${EndIf}
+                                DetailPrint $R1
+                ${LoopWhile} $R1 < 5
 
-                                                                                                                                                                                                                                ; ----------------- ExitWhile -----------------
+                ; ----------------- ExitWhile -----------------
 
-                                                                                                                                                                                                                                StrCpy $R1 0
-                                                                                                                                                                                                                                ${While} $R1 < 5
-                                                                                                                                                                                                                                                IntOp $R1 $R1 + 1
-                                                                                                                                                                                                                                                ${If} $R1 == 4
-                                                                                                                                                                                                                                                                ${ExitWhile}
-                                                                                                                                                                                                                                                ${EndIf}
-                                                                                                                                                                                                                                                DetailPrint $R1
-                                                                                                                                                                                                                                ${EndWhile}
+                StrCpy $R1 0
+                ${While} $R1 < 5
+                                IntOp $R1 $R1 + 1
+                                ${If} $R1 == 4
+                                                ${ExitWhile}
+                                ${EndIf}
+                                DetailPrint $R1
+                ${EndWhile}
 
-                                                                                                                                                                                                                                ; ----------------- For - Next -----------------
+                ; ----------------- For - Next -----------------
 
-                                                                                                                                                                                                                                ${For} $R1 1 5
-                                                                                                                                                                                                                                                DetailPrint $R1
-                                                                                                                                                                                                                                ${Next}
+                ${For} $R1 1 5
+                                DetailPrint $R1
+                ${Next}
 
-                                                                                                                                                                                                                                ; ----------------- ForEach -----------------
+                ; ----------------- ForEach -----------------
 
-                                                                                                                                                                                                                                ${ForEach} $R1 1 5 + 1
-                                                                                                                                                                                                                                                DetailPrint $R1
-                                                                                                                                                                                                                                ${Next}
-                                                                                                                                                                                                                                ${ForEach} $R1 10 2 - 2
-                                                                                                                                                                                                                                                DetailPrint $R1
-                                                                                                                                                                                                                                ${Next}
+                ${ForEach} $R1 1 5 + 1
+                                DetailPrint $R1
+                ${Next}
+                ${ForEach} $R1 10 2 - 2
+                                DetailPrint $R1
+                ${Next}
 
-                                                                                                                                                                                                                                ; ----------------- Break & Continue -----------------
+                ; ----------------- Break & Continue -----------------
 
-                                                                                                                                                                                                                                ${For} $R1 1 5
-                                                                                                                                                                                                                                                ${If} $R1 == 2
-                                                                                                                                                                                                                                                                ${Continue}
-                                                                                                                                                                                                                                                ${ElseIf} $R1 == 4
-                                                                                                                                                                                                                                                                ${Break}
-                                                                                                                                                                                                                                ${EndIf}
-                                                                                                                                                                                                                                DetailPrint $R1
-                                                                                                                                                                                                                ${Next}
+                ${For} $R1 1 5
+                                ${If} $R1 == 2
+                                                ${Continue}
+                                ${ElseIf} $R1 == 4
+                                                ${Break}
+                                ${EndIf}
+                                DetailPrint $R1
+                ${Next}
 
-                                                                                                                                                                                                                ; ----------------- ExitFor -----------------
+                ; ----------------- ExitFor -----------------
 
-                                                                                                                                                                                                                ${For} $R1 1 5
-                                                                                                                                                                                                                                ${If} $R1 == 4
-                                                                                                                                                                                                                                                ${ExitFor}
-                                                                                                                                                                                                                                ${EndIf}
-                                                                                                                                                                                                                                DetailPrint $R1
-                                                                                                                                                                                                                ${Next}
+                ${For} $R1 1 5
+                                ${If} $R1 == 4
+                                                ${ExitFor}
+                                ${EndIf}
+                                DetailPrint $R1
+                ${Next}
 
-                                                                                                                                                                                                SectionEnd
+SectionEnd

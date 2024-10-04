@@ -14,37 +14,40 @@ import (
 
 var (
 	rules = struct {
-		doubleIndenters  []string
-		indenters        []string
-		dedenters        []string
-		specialIndenters []string
-		specialDedenters []string
+		beforeIndenters []string
+		beforeDedenters []string
+		afterIndenters  []string
+		afterDedenters  []string
+		// specialIndenters []string
 	}{
-		doubleIndenters: []string{
-			"${Switch}", "${Select}",
+		beforeIndenters: []string{
+			"${Select}",
 		},
-		indenters: []string{
+		beforeDedenters: []string{
+			"${EndSelect}", "${EndSwitch}", "${EndSwitch}", "SectionEnd", "FunctionEnd", "${AndIf}", "${EndIf}", "${OrIf}", "${ElseIf}", "${AndIfNot}",
+			"${ElseIfNot}", "${OrIfNot}", "${ElseUnless}", "${Else}", "${Next}", "${Case}", "${Default}",
+			"!endif", "!else", "!macroend", "PageExEnd", "SectionGroupEnd",
+		},
+		afterIndenters: []string{
 			"!if", "!ifdef", "!ifmacrodef", "!ifmacrondef", "!ifndef", "!macro",
 			"${Case2}", "${Case3}", "${Case4}", "${Case5}",
-			"${Default}", "${Do}", "${DoUntil}", "${DoWhile}", "${For}", "${ForEach}",
+			"${Do}", "${DoUntil}", "${DoWhile}", "${For}", "${ForEach}",
 			"${If}", "${IfNot}", "${MementoSection}", "${MementoUnselectedSection}",
 			"${Unless}", "Function", "PageEx", "Section",
-			"SectionGroup", "${While}",
+			"SectionGroup", "${While}", "${AndIf}", "${OrIf}", "${ElseIf}", "${AndIfNot}", "${ElseIfNot}",
+			"${OrIfNot}", "${ElseUnless}", "${Else}",
+			"${Case}", "${Switch}", "${Switch}", "${Default}",
+			"!else",
 		},
-		dedenters: []string{
-			"!endif", "!macroend", "${EndIf}", "${EndSelect}", "${EndSwitch}",
+		afterDedenters: []string{
+			"!macroend",
 			"${EndWhile}", "${Loop}", "${LoopUntil}", "${LoopWhile}",
-			"${MementoSectionEnd}", "${Next}", "${EndUnless}", "FunctionEnd",
-			"PageExEnd", "SectionEnd", "SectionGroupEnd",
+			"${MementoSectionEnd}", "${EndUnless}",
+			"!elseif",
+			"${AndUnless}",
+			"${OrUnless}", "${CaseElse}",
 		},
-		specialIndenters: []string{
-			"!else", "!elseif", "${Else}", "${ElseIf}", "${ElseIfNot}",
-			"${ElseUnless}", "${AndIf}", "${AndIfNot}", "${AndUnless}",
-			"${OrIf}", "${OrIfNot}", "${OrUnless}", "${Case}", "${CaseElse}",
-		},
-		specialDedenters: []string{
-			"${Break}",
-		},
+		// specialIndenters: []string{},
 	}
 )
 
@@ -108,26 +111,40 @@ func createFormatter(options FormatterOptions) func(scanner *bufio.Scanner) (str
 					previousLineEmpty = true
 				}
 				formattedLines = append(formattedLines, formatLineForGoto(trimmedLine, indentationLevel, mergedOptions))
-			} else if checkKeyPass(rules.specialIndenters, keyword) {
-				formattedLines = append(formattedLines, formatLine(trimmedLine, indentationLevel-1, mergedOptions))
-			} else if checkKeyPass(rules.specialDedenters, keyword) {
-				formattedLines = append(formattedLines, formatLine(trimmedLine, indentationLevel, mergedOptions))
-				indentationLevel--
-			} else if checkKeyPass(rules.doubleIndenters, keyword) {
-				formattedLines = append(formattedLines, formatLine(trimmedLine, indentationLevel, mergedOptions))
-				indentationLevel += 2
-			} else if checkKeyPass(rules.indenters, keyword) {
-				formattedLines = append(formattedLines, formatLine(trimmedLine, indentationLevel, mergedOptions))
-				indentationLevel++
-			} else if checkKeyPass(rules.dedenters, keyword) {
-				indentationLevel--
+				// Reset flag when we hit a non-empty line
+				previousLineEmpty = false
+				continue
+			}
+
+			currentIndentation := indentationLevel
+			if counter := checkKeyPass(rules.beforeIndenters, keyword); counter > 0 {
+				indentationLevel += counter
+				currentIndentation = indentationLevel
+				// formattedLines = append(formattedLines, formatLine(trimmedLine, indentationLevel, mergedOptions))
+			}
+			if counter := checkKeyPass(rules.beforeDedenters, keyword); counter > 0 {
+				indentationLevel -= counter
 				if indentationLevel < 0 {
 					indentationLevel = 0
 				}
-				formattedLines = append(formattedLines, formatLine(trimmedLine, indentationLevel, mergedOptions))
-			} else {
-				formattedLines = append(formattedLines, formatLine(trimmedLine, indentationLevel, mergedOptions))
+				currentIndentation = indentationLevel
+				// formattedLines = append(formattedLines, formatLine(trimmedLine, indentationLevel, mergedOptions))
 			}
+			if counter := checkKeyPass(rules.afterIndenters, keyword); counter > 0 {
+				currentIndentation = indentationLevel
+				// formattedLines = append(formattedLines, formatLine(trimmedLine, indentationLevel, mergedOptions))
+				indentationLevel += counter
+			}
+			if counter := checkKeyPass(rules.afterDedenters, keyword); counter > 0 {
+				currentIndentation = indentationLevel
+				// formattedLines = append(formattedLines, formatLine(trimmedLine, indentationLevel, mergedOptions))
+				indentationLevel -= counter
+				if indentationLevel < 0 {
+					indentationLevel = 0
+				}
+			}
+
+			formattedLines = append(formattedLines, formatLine(trimmedLine, currentIndentation, mergedOptions))
 
 			// Reset flag when we hit a non-empty line
 			previousLineEmpty = false
@@ -139,14 +156,15 @@ func createFormatter(options FormatterOptions) func(scanner *bufio.Scanner) (str
 	}
 }
 
-func checkKeyPass(ruleData []string, keyword string) bool {
+func checkKeyPass(ruleData []string, keyword string) int {
+	counter := 0
 	for _, rule := range ruleData {
 		if strings.EqualFold(keyword, rule) {
-			return true
+			counter++
 		}
 	}
 
-	return false
+	return counter
 }
 
 func isGotoLine(line string) bool {
@@ -158,6 +176,11 @@ func formatLine(line string, level int, options FormatterOptions) string {
 	if len(line) == 0 {
 		return ""
 	}
+
+	if level < 0 {
+		level = 0
+	}
+
 	indent := strings.Repeat("\t", options.IndentSize*level)
 	if !options.UseTabs {
 		indent = strings.Repeat(" ", options.IndentSize*level)
