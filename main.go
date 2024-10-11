@@ -31,11 +31,32 @@ var (
 		afterDedenters:           []string{},
 		standardSyntaxVocabulary: []string{},
 		syntaxValidations: []syntaxValidation{
-			syntaxValidation{
+			{
 				"Goto", 2,
 			},
-			syntaxValidation{
+			{
 				"LangString", 4,
+			},
+			{
+				"Unicode", 2,
+			},
+			{
+				"!define", 3,
+			},
+			{
+				"VIProductVersion", 2,
+			},
+			{
+				"VIAddVersionKey", 3,
+			},
+			{
+				"!include", 2,
+			},
+			{
+				"!insertmacro", 2,
+			},
+			{
+				"LicenseLangString", 3,
 			},
 		},
 	}
