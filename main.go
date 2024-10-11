@@ -58,6 +58,27 @@ var (
 			{
 				"LicenseLangString", 3,
 			},
+			{
+				"Call", 2,
+			},
+			{
+				"SetOutPath", 2,
+			},
+			{
+				"SetOverwrite", 2,
+			},
+			{
+				"File", 2,
+			},
+			{
+				"CreateDirectory", 2,
+			},
+			{
+				"CreateShortCut", 2,
+			},
+			{
+				"DetailPrint", 2,
+			},
 		},
 	}
 )
