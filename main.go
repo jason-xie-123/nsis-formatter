@@ -96,7 +96,7 @@ func createFormatter(options formatterOptions) func(scanner *bufio.Scanner) (str
 
 			// Process the line as per the indentation rules
 			trimmedLineDatas := strings.Split(trimmedLine, " ")
-			if strings.HasPrefix(trimmedLineDatas[0], ";") {
+			if len(trimmedLineDatas[0]) > 1 && strings.HasPrefix(trimmedLineDatas[0], ";") && !strings.HasPrefix(trimmedLineDatas[0], "; ") {
 				trimmedLineDatas[0] = "; " + trimmedLineDatas[0][1:]
 			}
 			keyword := strings.TrimSpace(trimmedLineDatas[0])
