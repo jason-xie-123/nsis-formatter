@@ -14,10 +14,12 @@ import (
 
 var (
 	rules = struct {
-		beforeIndenters []string
-		beforeDedenters []string
-		afterIndenters  []string
-		afterDedenters  []string
+		beforeIndenters          []string
+		beforeDedenters          []string
+		afterIndenters           []string
+		afterDedenters           []string
+		standardSyntaxVocabulary []string
+		syntaxValidations        []syntaxValidation
 	}{
 		beforeIndenters: []string{},
 		beforeDedenters: []string{
@@ -26,21 +28,35 @@ var (
 		afterIndenters: []string{
 			"!if", "!ifdef", "!ifmacrodef", "!ifmacrondef", "!ifndef", "!macro", "${Do}", "${DoUntil}", "${DoWhile}", "${For}", "${ForEach}", "${If}", "${IfNot}", "${Unless}", "Function", "PageEx", "Section", "SectionGroup", "${While}", "${AndIf}", "${OrIf}", "${ElseIf}", "${AndIfNot}", "${ElseIfNot}", "${OrIfNot}", "${ElseUnless}", "${Else}", "${Case}", "${Switch}", "${Switch}", "${Default}", "!else", "${Select}", "${Select}", "${CaseElse}", "${AndUnless}", "${OrUnless}", "!elseif",
 		},
-		afterDedenters: []string{},
+		afterDedenters:           []string{},
+		standardSyntaxVocabulary: []string{},
+		syntaxValidations: []syntaxValidation{
+			syntaxValidation{
+				"Goto", 2,
+			},
+			syntaxValidation{
+				"LangString", 4,
+			},
+		},
 	}
 )
 
 const defaultIndentation = 2
 
-type FormatterOptions struct {
+type formatterOptions struct {
 	EndOfLines     string
 	IndentSize     int
 	TrimEmptyLines bool
 	UseTabs        bool
 }
 
-func createFormatter(options FormatterOptions) func(scanner *bufio.Scanner) (string, error) {
-	mergedOptions := FormatterOptions{
+type syntaxValidation struct {
+	keyword               string
+	defaultParameterCount int
+}
+
+func createFormatter(options formatterOptions) func(scanner *bufio.Scanner) (string, error) {
+	mergedOptions := formatterOptions{
 		EndOfLines:     detectPlatformEOL(),
 		IndentSize:     defaultIndentation,
 		TrimEmptyLines: true,
@@ -79,7 +95,11 @@ func createFormatter(options FormatterOptions) func(scanner *bufio.Scanner) (str
 			}
 
 			// Process the line as per the indentation rules
-			keyword := strings.TrimSpace(strings.Split(trimmedLine, " ")[0])
+			trimmedLineDatas := strings.Split(trimmedLine, " ")
+			if strings.HasPrefix(trimmedLineDatas[0], ";") {
+				trimmedLineDatas[0] = "; " + trimmedLineDatas[0][1:]
+			}
+			keyword := strings.TrimSpace(trimmedLineDatas[0])
 
 			if isGotoLine(trimmedLine) {
 				if !previousLineEmpty {
@@ -94,30 +114,37 @@ func createFormatter(options FormatterOptions) func(scanner *bufio.Scanner) (str
 			}
 
 			currentIndentation := indentationLevel
-			if counter := checkKeyPass(rules.beforeIndenters, keyword); counter > 0 {
+			if counter, formattedKeyWord := checkKeyPass(rules.beforeIndenters, keyword); counter > 0 {
+				trimmedLineDatas[0] = formattedKeyWord
 				indentationLevel += counter
 				currentIndentation = indentationLevel
 			}
-			if counter := checkKeyPass(rules.beforeDedenters, keyword); counter > 0 {
+			if counter, formattedKeyWord := checkKeyPass(rules.beforeDedenters, keyword); counter > 0 {
+				trimmedLineDatas[0] = formattedKeyWord
 				indentationLevel -= counter
 				if indentationLevel < 0 {
 					indentationLevel = 0
 				}
 				currentIndentation = indentationLevel
 			}
-			if counter := checkKeyPass(rules.afterIndenters, keyword); counter > 0 {
+			if counter, formattedKeyWord := checkKeyPass(rules.afterIndenters, keyword); counter > 0 {
+				trimmedLineDatas[0] = formattedKeyWord
 				currentIndentation = indentationLevel
 				indentationLevel += counter
 			}
-			if counter := checkKeyPass(rules.afterDedenters, keyword); counter > 0 {
+			if counter, formattedKeyWord := checkKeyPass(rules.afterDedenters, keyword); counter > 0 {
+				trimmedLineDatas[0] = formattedKeyWord
 				currentIndentation = indentationLevel
 				indentationLevel -= counter
 				if indentationLevel < 0 {
 					indentationLevel = 0
 				}
+			}
+			if counter, formattedKeyWord := checkKeyPass(rules.standardSyntaxVocabulary, keyword); counter > 0 {
+				trimmedLineDatas[0] = formattedKeyWord
 			}
 
-			formattedLines = append(formattedLines, formatLine(trimmedLine, currentIndentation, mergedOptions))
+			formattedLines = append(formattedLines, formatLine(lineSyntaxValidation(trimmedLineDatas), currentIndentation, mergedOptions))
 
 			// Reset flag when we hit a non-empty line
 			previousLineEmpty = false
@@ -129,15 +156,48 @@ func createFormatter(options FormatterOptions) func(scanner *bufio.Scanner) (str
 	}
 }
 
-func checkKeyPass(ruleData []string, keyword string) int {
+func lineSyntaxValidation(trimmedLineDatas []string) string {
+	correctedLineData := make([]string, 0, len(trimmedLineDatas))
+	isNeedSyntaxValidation := false
+	parameterCount := 0
+	for _, rule := range rules.syntaxValidations {
+		if strings.EqualFold(trimmedLineDatas[0], rule.keyword) {
+			isNeedSyntaxValidation = true
+			parameterCount = rule.defaultParameterCount
+			break
+		}
+	}
+
+	if isNeedSyntaxValidation {
+		currentIndex := 0
+		for _, data := range trimmedLineDatas {
+			if currentIndex < parameterCount {
+				if len(data) > 0 {
+					correctedLineData = append(correctedLineData, data)
+					currentIndex++
+				}
+			} else {
+				correctedLineData = append(correctedLineData, data)
+			}
+		}
+	} else {
+		correctedLineData = append(correctedLineData, trimmedLineDatas...)
+	}
+
+	return strings.Join(correctedLineData, " ")
+}
+
+func checkKeyPass(ruleData []string, keyword string) (int, string) {
 	counter := 0
+	currentRule := ""
 	for _, rule := range ruleData {
 		if strings.EqualFold(keyword, rule) {
+			currentRule = rule
 			counter++
 		}
 	}
 
-	return counter
+	return counter, currentRule
 }
 
 func isGotoLine(line string) bool {
@@ -145,7 +205,7 @@ func isGotoLine(line string) bool {
 	return re.MatchString(line)
 }
 
-func formatLine(line string, level int, options FormatterOptions) string {
+func formatLine(line string, level int, options formatterOptions) string {
 	if len(line) == 0 {
 		return ""
 	}
@@ -161,7 +221,7 @@ func formatLine(line string, level int, options FormatterOptions) string {
 	return fmt.Sprintf("%s%s", indent, strings.TrimSpace(line))
 }
 
-func formatLineForGoto(line string, level int, options FormatterOptions) string {
+func formatLineForGoto(line string, level int, options formatterOptions) string {
 	if len(line) == 0 {
 		return ""
 	}
@@ -225,7 +285,7 @@ func main() {
 			}
 
 			file := c.Args().First()
-			options := FormatterOptions{
+			options := formatterOptions{
 				IndentSize:     c.Int("indent-size"),
 				TrimEmptyLines: c.Bool("trim"),
 				UseTabs:        !c.Bool("use-spaces"),

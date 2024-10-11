@@ -7,7 +7,7 @@ import (
 )
 
 func TestEmptyLines(t *testing.T) {
-	options := FormatterOptions{
+	options := formatterOptions{
 		EndOfLines:     "\n",
 		IndentSize:     4,
 		TrimEmptyLines: true,
@@ -44,7 +44,7 @@ func TestEmptyLines(t *testing.T) {
 }
 
 func TestSpaceIndentation(t *testing.T) {
-	options := FormatterOptions{
+	options := formatterOptions{
 		EndOfLines:     "\n",
 		IndentSize:     2,
 		TrimEmptyLines: true,
@@ -81,7 +81,7 @@ func TestSpaceIndentation(t *testing.T) {
 }
 
 func TestSpaceIndentation2(t *testing.T) {
-	options := FormatterOptions{
+	options := formatterOptions{
 		EndOfLines:     "\n",
 		IndentSize:     16,
 		TrimEmptyLines: true,
@@ -118,7 +118,7 @@ func TestSpaceIndentation2(t *testing.T) {
 }
 
 func TestSpaceIndentation3(t *testing.T) {
-	options := FormatterOptions{
+	options := formatterOptions{
 		EndOfLines:     "\r\n",
 		IndentSize:     16,
 		TrimEmptyLines: true,
@@ -155,7 +155,7 @@ func TestSpaceIndentation3(t *testing.T) {
 }
 
 func TestTabIndentation(t *testing.T) {
-	options := FormatterOptions{
+	options := formatterOptions{
 		EndOfLines:     "\n",
 		IndentSize:     2,
 		TrimEmptyLines: true,
@@ -192,7 +192,7 @@ func TestTabIndentation(t *testing.T) {
 }
 
 func TestTabIndentation2(t *testing.T) {
-	options := FormatterOptions{
+	options := formatterOptions{
 		EndOfLines:     "\n",
 		IndentSize:     2,
 		TrimEmptyLines: true,
@@ -229,7 +229,7 @@ func TestTabIndentation2(t *testing.T) {
 }
 
 func TestCommonTest(t *testing.T) {
-	options := FormatterOptions{
+	options := formatterOptions{
 		EndOfLines:     "\r\n",
 		IndentSize:     16,
 		TrimEmptyLines: true,
@@ -266,7 +266,7 @@ func TestCommonTest(t *testing.T) {
 }
 
 func TestCommonTest2(t *testing.T) {
-	options := FormatterOptions{
+	options := formatterOptions{
 		EndOfLines:     "\r\n",
 		IndentSize:     16,
 		TrimEmptyLines: true,
@@ -303,7 +303,7 @@ func TestCommonTest2(t *testing.T) {
 }
 
 func TestCommonTest3(t *testing.T) {
-	options := FormatterOptions{
+	options := formatterOptions{
 		EndOfLines:     "\r\n",
 		IndentSize:     16,
 		TrimEmptyLines: true,
@@ -340,7 +340,7 @@ func TestCommonTest3(t *testing.T) {
 }
 
 func TestCommonTest4(t *testing.T) {
-	options := FormatterOptions{
+	options := formatterOptions{
 		EndOfLines:     "\r\n",
 		IndentSize:     16,
 		TrimEmptyLines: true,
@@ -376,9 +376,46 @@ func TestCommonTest4(t *testing.T) {
 	}
 }
 
+func TestCommonTest5(t *testing.T) {
+	options := formatterOptions{
+		EndOfLines:     "\r\n",
+		IndentSize:     16,
+		TrimEmptyLines: true,
+		UseTabs:        false,
+	}
+	format := createFormatter(options)
+
+	file, err := os.Open("./fixtures/commontest5.nsi")
+	if err != nil {
+		t.Error(err)
+	}
+
+	defer file.Close()
+
+	scanner := bufio.NewScanner(file)
+	formattedContent, err := format(scanner)
+	if err != nil {
+		t.Error(err)
+	}
+
+	contentExpected, err := os.ReadFile("./expected/commontest5.nsi")
+	if err != nil {
+		t.Error(err)
+	}
+
+	// err = os.WriteFile("./expected/commontest5.nsi", []byte(formattedContent), 0644)
+	// if err != nil {
+	// 	t.Error(err)
+	// }
+
+	if formattedContent != string(contentExpected) {
+		t.Errorf("TestCommonTest5 failed")
+	}
+}
+
 // go test -bench=BenchmarkIndentation -benchtime=5s
 func BenchmarkIndentation(b *testing.B) {
-	options := FormatterOptions{
+	options := formatterOptions{
 		EndOfLines:     "\n",
 		IndentSize:     2,
 		TrimEmptyLines: true,
