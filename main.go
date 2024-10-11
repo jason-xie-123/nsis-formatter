@@ -164,6 +164,7 @@ func lineSyntaxValidation(trimmedLineDatas []string) string {
 		if strings.EqualFold(trimmedLineDatas[0], rule.keyword) {
 			isNeedSyntaxValidation = true
 			parameterCount = rule.defaultParameterCount
+			trimmedLineDatas[0] = rule.keyword
 			break
 		}
 	}

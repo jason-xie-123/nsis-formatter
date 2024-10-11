@@ -39,7 +39,7 @@ Section "MS .NET Framework v${NETVersion}" SecFramework
 
               check_finish:
                 StrCpy $0 0
-                GoTo process_check_result
+                Goto process_check_result
 
               process_check_result:
                 MessageBox MB_OK "check finish"
