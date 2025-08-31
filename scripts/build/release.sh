@@ -37,7 +37,7 @@ echo "Compiling binaries for multiple platforms..."
 cd "$PROJECT_FOLDER" || exit >/dev/null 2>&1
 
 # Linux amd64
-COMMAND="GOOS=linux GOARCH=amd64 go build -o $RELEASE_DIR/${PROJECT_NAME}-linux-amd64"
+COMMAND="GOOS=linux GOARCH=amd64 go build -ldflags '-w -s' -trimpath -o $RELEASE_DIR/${PROJECT_NAME}-linux-amd64"
 echo exec: "$COMMAND"
 if eval "$COMMAND"; then
     echo "Linux amd64 binary compiled successfully."
@@ -46,7 +46,7 @@ else
     exit 1
 fi
 # Windows amd64
-COMMAND="GOOS=windows GOARCH=amd64 go build -o $RELEASE_DIR/${PROJECT_NAME}-windows-amd64.exe"
+COMMAND="GOOS=windows GOARCH=amd64 go build -ldflags '-w -s' -trimpath -o $RELEASE_DIR/${PROJECT_NAME}-windows-amd64.exe"
 echo exec: "$COMMAND"
 if eval "$COMMAND"; then
     echo "Windows amd64 binary compiled successfully."
@@ -55,7 +55,7 @@ else
     exit 1
 fi
 # Windows 32-bit
-COMMAND="GOOS=windows GOARCH=386 go build -o $RELEASE_DIR/${PROJECT_NAME}-windows-386.exe"
+COMMAND="GOOS=windows GOARCH=386 go build -ldflags '-w -s' -trimpath -o $RELEASE_DIR/${PROJECT_NAME}-windows-386.exe"
 echo exec: "$COMMAND"
 if eval "$COMMAND"; then
     echo "Windows 32-bit binary compiled successfully."
@@ -64,7 +64,7 @@ else
     exit 1
 fi
 # Windows ARM
-COMMAND="GOOS=windows GOARCH=arm64 go build -o $RELEASE_DIR/${PROJECT_NAME}-windows-arm64.exe"
+COMMAND="GOOS=windows GOARCH=arm64 go build -ldflags '-w -s' -trimpath -o $RELEASE_DIR/${PROJECT_NAME}-windows-arm64.exe"
 echo exec: "$COMMAND"
 if eval "$COMMAND"; then
     echo "Windows ARM binary compiled successfully."
@@ -73,7 +73,7 @@ else
     exit 1
 fi
 # macOS amd64
-COMMAND="GOOS=darwin GOARCH=amd64 go build -o $RELEASE_DIR/${PROJECT_NAME}-darwin-amd64"
+COMMAND="GOOS=darwin GOARCH=amd64 go build -ldflags '-w -s' -trimpath -o $RELEASE_DIR/${PROJECT_NAME}-darwin-amd64"
 echo exec: "$COMMAND"
 if eval "$COMMAND"; then
     echo "macOS amd64 binary compiled successfully."
@@ -82,7 +82,7 @@ else
     exit 1
 fi
 # macOS ARM (Apple Silicon)
-COMMAND="GOOS=darwin GOARCH=arm64 go build -o $RELEASE_DIR/${PROJECT_NAME}-darwin-arm64"
+COMMAND="GOOS=darwin GOARCH=arm64 go build -ldflags '-w -s' -trimpath -o $RELEASE_DIR/${PROJECT_NAME}-darwin-arm64"
 echo exec: "$COMMAND"
 if eval "$COMMAND"; then
     echo "macOS ARM binary compiled successfully."

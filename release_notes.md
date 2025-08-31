@@ -1,3 +1,3 @@
-## Changelog for v0.1.2
+## Changelog for v0.1.3
 
-- Support syntax validation
+- reduce binary size
