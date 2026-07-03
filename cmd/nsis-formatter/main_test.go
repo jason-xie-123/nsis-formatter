@@ -20,7 +20,7 @@ func TestEmptyLines(t *testing.T) {
 		t.Error(err)
 	}
 
-	defer file.Close()
+	defer func() { _ = file.Close() }()
 
 	scanner := bufio.NewScanner(file)
 	formattedContent, err := format(scanner)
@@ -57,7 +57,7 @@ func TestSpaceIndentation(t *testing.T) {
 		t.Error(err)
 	}
 
-	defer file.Close()
+	defer func() { _ = file.Close() }()
 
 	scanner := bufio.NewScanner(file)
 	formattedContent, err := format(scanner)
@@ -94,7 +94,7 @@ func TestSpaceIndentation2(t *testing.T) {
 		t.Error(err)
 	}
 
-	defer file.Close()
+	defer func() { _ = file.Close() }()
 
 	scanner := bufio.NewScanner(file)
 	formattedContent, err := format(scanner)
@@ -131,7 +131,7 @@ func TestSpaceIndentation3(t *testing.T) {
 		t.Error(err)
 	}
 
-	defer file.Close()
+	defer func() { _ = file.Close() }()
 
 	scanner := bufio.NewScanner(file)
 	formattedContent, err := format(scanner)
@@ -168,7 +168,7 @@ func TestTabIndentation(t *testing.T) {
 		t.Error(err)
 	}
 
-	defer file.Close()
+	defer func() { _ = file.Close() }()
 
 	scanner := bufio.NewScanner(file)
 	formattedContent, err := format(scanner)
@@ -205,7 +205,7 @@ func TestTabIndentation2(t *testing.T) {
 		t.Error(err)
 	}
 
-	defer file.Close()
+	defer func() { _ = file.Close() }()
 
 	scanner := bufio.NewScanner(file)
 	formattedContent, err := format(scanner)
@@ -242,7 +242,7 @@ func TestCommonTest(t *testing.T) {
 		t.Error(err)
 	}
 
-	defer file.Close()
+	defer func() { _ = file.Close() }()
 
 	scanner := bufio.NewScanner(file)
 	formattedContent, err := format(scanner)
@@ -279,7 +279,7 @@ func TestCommonTest2(t *testing.T) {
 		t.Error(err)
 	}
 
-	defer file.Close()
+	defer func() { _ = file.Close() }()
 
 	scanner := bufio.NewScanner(file)
 	formattedContent, err := format(scanner)
@@ -316,7 +316,7 @@ func TestCommonTest3(t *testing.T) {
 		t.Error(err)
 	}
 
-	defer file.Close()
+	defer func() { _ = file.Close() }()
 
 	scanner := bufio.NewScanner(file)
 	formattedContent, err := format(scanner)
@@ -353,7 +353,7 @@ func TestCommonTest4(t *testing.T) {
 		t.Error(err)
 	}
 
-	defer file.Close()
+	defer func() { _ = file.Close() }()
 
 	scanner := bufio.NewScanner(file)
 	formattedContent, err := format(scanner)
@@ -390,7 +390,7 @@ func TestCommonTest5(t *testing.T) {
 		t.Error(err)
 	}
 
-	defer file.Close()
+	defer func() { _ = file.Close() }()
 
 	scanner := bufio.NewScanner(file)
 	formattedContent, err := format(scanner)
@@ -428,7 +428,7 @@ func BenchmarkIndentation(b *testing.B) {
 		b.Error(err)
 	}
 
-	defer file.Close()
+	defer func() { _ = file.Close() }()
 
 	for i := 0; i < b.N; i++ {
 		scanner := bufio.NewScanner(file)

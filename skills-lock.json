@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "skills": {
+    "git-commit": {
+      "source": "git@github.com-personal:jason-xie-123/jason-personal-skills.git",
+      "sourceType": "git",
+      "skillPath": "skills/git-commit/SKILL.md",
+      "computedHash": "73577122845fc108e1fd2b5c2339ed164945c807dfe1d4d4a8e57e1eb6d5744d"
+    }
+  }
+}
