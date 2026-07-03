@@ -7,11 +7,8 @@ SHELL_FOLDER=$(
 )
 PROJECT_FOLDER=$SHELL_FOLDER/../..
 
-cd "$SHELL_FOLDER" || exit >/dev/null 2>&1
+cd "$PROJECT_FOLDER" || exit >/dev/null 2>&1
 
-# shellcheck source=/dev/null
-source "$PROJECT_FOLDER/scripts/base/env.sh"
-
-go install nsis-formatter
+go install ./cmd/nsis-formatter
 
 cd "$OLD_PWD" || exit >/dev/null 2>&1
