@@ -1,0 +1,52 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.20'
+
+      - name: Verify release notes exist
+        run: |
+          if [ ! -s release_notes.md ]; then
+            echo "release_notes.md is missing or empty — draft it locally before tagging (see AGENTS.md)."
+            exit 1
+          fi
+
+      - name: Run tests
+        run: go test ./...
+
+      - name: Cross-compile binaries
+        env:
+          PROJECT_NAME: nsis-formatter
+        run: |
+          set -e
+          mkdir -p release
+          GOOS=linux   GOARCH=amd64 go build -ldflags '-w -s' -trimpath -o "release/${PROJECT_NAME}-linux-amd64"      ./cmd/nsis-formatter
+          GOOS=windows GOARCH=amd64 go build -ldflags '-w -s' -trimpath -o "release/${PROJECT_NAME}-windows-amd64.exe" ./cmd/nsis-formatter
+          GOOS=windows GOARCH=386   go build -ldflags '-w -s' -trimpath -o "release/${PROJECT_NAME}-windows-386.exe"   ./cmd/nsis-formatter
+          GOOS=windows GOARCH=arm64 go build -ldflags '-w -s' -trimpath -o "release/${PROJECT_NAME}-windows-arm64.exe" ./cmd/nsis-formatter
+          GOOS=darwin  GOARCH=amd64 go build -ldflags '-w -s' -trimpath -o "release/${PROJECT_NAME}-darwin-amd64"      ./cmd/nsis-formatter
+          GOOS=darwin  GOARCH=arm64 go build -ldflags '-w -s' -trimpath -o "release/${PROJECT_NAME}-darwin-arm64"      ./cmd/nsis-formatter
+          ls -lh release
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "${{ github.ref_name }}" \
+            --title "Release ${{ github.ref_name }}" \
+            --notes-file release_notes.md \
+            release/*
