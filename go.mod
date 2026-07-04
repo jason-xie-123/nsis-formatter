@@ -1,4 +1,4 @@
-module nsis-formatter
+module github.com/jason-xie-123/nsis-formatter
 
 go 1.20
 

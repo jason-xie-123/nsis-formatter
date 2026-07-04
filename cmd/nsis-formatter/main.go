@@ -3,7 +3,7 @@ package main
 import (
 	"bufio"
 	"fmt"
-	packageVersion "nsis-formatter/internal/version"
+	packageVersion "github.com/jason-xie-123/nsis-formatter/internal/version"
 	"os"
 	"regexp"
 	"runtime"
